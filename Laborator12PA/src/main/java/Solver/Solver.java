@@ -18,6 +18,12 @@ import java.util.jar.JarFile;
  */
 public class Solver {
 
+    private int failed, passed;
+
+    public Solver(){
+        this.failed = this.passed = 0;
+    }
+
     /**
      * Verifica daca - clasa daca ca parametru are pe rand
      * 1. Package
@@ -102,9 +108,7 @@ public class Solver {
     }
 
     public void explore(File file) throws MalformedURLException, ClassNotFoundException {
-        System.out.println("inceput");
         if(file.getName().endsWith(".jar")){
-            System.out.println("sunt aici 2");
             JarFile jarFile = null;
             try{
                 jarFile = new JarFile(file);
@@ -141,12 +145,9 @@ public class Solver {
             }
         }
         if(file.exists()){
-            System.out.println("sunt aici 3");
             if(file.isDirectory()){
-                System.out.println("Sunt aici");
-                for(File file1 : Objects.requireNonNull(file.listFiles())){
+                for(File file1 : Objects.requireNonNull(file.listFiles()))
                     explore(file1);
-                }
             }
             else{
                 if(file.getName().endsWith(".java")){
