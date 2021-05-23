@@ -18,10 +18,10 @@ import java.util.jar.JarFile;
  */
 public class Solver {
 
-    private int failed, passed;
+    private int failed, passed, found;
 
     public Solver(){
-        this.failed = this.passed = 0;
+        this.failed = this.passed = this.found = 0;
     }
 
     /**
@@ -68,13 +68,16 @@ public class Solver {
                     Parameter[] parameters = method.getParameters();
                     if(parameters.length == 0){
                         try{
+                            this.found++;
                             System.out.println(method.getName());
                             method.invoke(null);
+                            this.passed++;
                         }
                         catch (IllegalAccessException illegalAccessException){
                             illegalAccessException.printStackTrace();
                         }
                         catch (InvocationTargetException invocationTargetException){
+                            this.failed++;
                             System.out.println("A esuat invoke " + invocationTargetException.getCause());
                         }
                     }
@@ -94,19 +97,28 @@ public class Solver {
                 Object[] objects = new Object[1];
                 objects[0] = (int) 99;
                 try{
+                    this.found++;
                     System.out.println(method.getName());
                     method.invoke(clasa.getDeclaredConstructor().newInstance(), objects);
+                    this.passed++;
                 }
                 catch (IllegalAccessException | InstantiationException | NoSuchMethodException illegalAccessException){
                     illegalAccessException.printStackTrace();
                 }
                 catch (InvocationTargetException invocationTargetException){
                     System.out.println("A esuat invoke " + invocationTargetException.getCause());
+                    this.failed++;
                 }
             }
         }
     }
 
+    /**
+     * Cauta in file recursiv fisiere .class
+     * @param file
+     * @throws MalformedURLException
+     * @throws ClassNotFoundException
+     */
     public void explore(File file) throws MalformedURLException, ClassNotFoundException {
         if(file.getName().endsWith(".jar")){
             JarFile jarFile = null;
@@ -161,6 +173,16 @@ public class Solver {
                 }
             }
         }
+    }
+
+    /**
+     * Afiseaza cate teste efectuate / teste trecute / teste picate sunt
+     */
+    public void statistics(){
+        System.out.println("\n-----STATISTICS-----");
+        System.out.println("Total tests" + found);
+        System.out.println("Passed tests" + passed);
+        System.out.println("Failed tests" + failed);
     }
 
 }

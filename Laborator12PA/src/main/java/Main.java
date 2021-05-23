@@ -18,7 +18,9 @@ public class Main {
             solver.info(aClass);
             solver.invoke(aClass);
             solver.invoke2(aClass);
+            System.out.println("-----EXPLORE-----");
             solver.explore(file);
+            solver.statistics();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
