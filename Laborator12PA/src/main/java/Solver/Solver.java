@@ -18,31 +18,6 @@ import java.util.jar.JarFile;
  */
 public class Solver {
 
-    public static Class<?> load(String name, URLClassLoader urlClassLoader, File file){
-        Class<?> temp=null;
-        try {
-            temp=Class.forName(name,true,urlClassLoader);
-        } catch(NoClassDefFoundError e){
-            String name1 = e.getMessage().split(": ")[1]
-                    .replace(")","")
-                    .replace("/","\\");
-            File file1 = new File(file.getAbsolutePath().replace(name1+".class",""));
-            try {
-                URL url = file1.getAbsoluteFile().toURI().toURL();
-                name1 = name1.replace("\\",".");
-                urlClassLoader = new URLClassLoader(new URL[]{url});
-                Class.forName(name1,true,urlClassLoader);
-                temp = Class.forName(name1,true,urlClassLoader);
-            } catch (MalformedURLException | ClassNotFoundException malformedURLException) {
-                malformedURLException.printStackTrace();
-            }
-        }
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return temp;
-    }
-
     /**
      * Verifica daca - clasa daca ca parametru are pe rand
      * 1. Package
